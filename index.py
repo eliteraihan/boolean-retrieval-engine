@@ -22,6 +22,12 @@ params:
     dictionary_file:    dictionary of terms
     postings_file:      postings file for all terms in dictionary
 """
+
+document_directory = 'D:/Documents/GitHub/boolean-retrieval-engine/documents'
+dictionary_file = 'dictionary.txt'
+postings_file = 'postings.txt'
+
+
 def index(document_directory, dictionary_file, postings_file):
     # preprocess docID list
     docID_list = [int(docID_string) for docID_string in os.listdir(document_directory)]
@@ -36,13 +42,13 @@ def index(document_directory, dictionary_file, postings_file):
     for docID in docID_list:
         if (LIMIT and docs_indexed == LIMIT): break
         file_path = os.path.join(document_directory, str(docID))
-        
+
         # if valid document
         if (os.path.isfile(file_path)):
             file = codecs.open(file_path, encoding='utf-8')
             document = file.read()                  # read entire document
             tokens = nltk.word_tokenize(document)   # list of word tokens from document
-            
+
             # for each term in document
             for word in tokens:
                 term = word.lower()         # casefolding
@@ -52,7 +58,7 @@ def index(document_directory, dictionary_file, postings_file):
                 if (term[-1] == "'"):
                     term = term[:-1]        # remove apostrophe
                 if (IGNORE_SINGLES and len(term) == 1):         continue    # if ignoring single terms
-                
+
                 # if term not already in dictionary
                 if (term not in dictionary):
                     dictionary[term] = [docID]   # define new term in in dictionary
@@ -61,11 +67,11 @@ def index(document_directory, dictionary_file, postings_file):
                     # if current docID is not yet in the postings list for term, append it
                     if (dictionary[term][-1] != docID):
                         dictionary[term].append(docID)
-                    
+
             docs_indexed += 1
             file.close()
 
-    # open files for writing   
+    # open files for writing
     dict_file = codecs.open(dictionary_file, 'w', encoding='utf-8')
     post_file = open(postings_file, 'wb')
 
@@ -80,7 +86,7 @@ def index(document_directory, dictionary_file, postings_file):
     # build dictionary file and postings file
     for term, postings_list in dictionary.items():
         df = len(postings_list)                     # document frequency is the same as length of postings list
-        
+
         # write each posting into postings file
         for docID in postings_list:
             posting = struct.pack('I', docID)   # pack docID into a byte array of size 4

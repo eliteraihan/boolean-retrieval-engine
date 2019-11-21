@@ -21,6 +21,12 @@ params:
     queries_file:       file of boolean queries
     output_file:        responses to boolean queries
 """
+
+dictionary_file = 'dictionary.txt'
+postings_file = 'postings.txt'
+queries_file = 'query.txt'
+output_file = 'output.txt'
+
 def search(dictionary_file, postings_file, queries_file, output_file):
     # open files
     dict_file = codecs.open(dictionary_file, encoding='utf-8')
@@ -106,9 +112,9 @@ def process_query(query, dictionary, post_file, indexed_docIDs):
         if (token != 'AND' and token != 'OR' and token != 'NOT'):
             token = stemmer.stem(token) # stem the token
             # default empty list if not in dictionary
-            if (token in dictionary): 
+            if (token in dictionary):
                 result = load_posting_list(post_file, dictionary[token][0], dictionary[token][1])
-        
+
         # else if AND operator
         elif (token == 'AND'):
             right_operand = results_stack.pop()
@@ -130,12 +136,12 @@ def process_query(query, dictionary, post_file, indexed_docIDs):
             result = boolean_NOT(right_operand, indexed_docIDs) # evaluate NOT
 
         # push evaluated result back to stack
-        results_stack.append(result)                        
+        results_stack.append(result)
         # print ('result', result) # check
 
     # NOTE: at this point results_stack should only have one item and it is the final result
     if len(results_stack) != 1: print ("ERROR: results_stack. Please check valid query") # check for errors
-    
+
     return results_stack.pop()
 
 """
@@ -166,7 +172,7 @@ def shunting_yard(infix_tokens):
     precedence['AND'] = 2
     precedence['OR'] = 1
     precedence['('] = 0
-    precedence[')'] = 0    
+    precedence[')'] = 0
 
     # declare data strucures
     output = []
@@ -174,18 +180,18 @@ def shunting_yard(infix_tokens):
 
     # while there are tokens to be read
     for token in infix_tokens:
-        
+
         # if left bracket
         if (token == '('):
             operator_stack.append(token)
-        
+
         # if right bracket, pop all operators from operator stack onto output until we hit left bracket
         elif (token == ')'):
             operator = operator_stack.pop()
             while operator != '(':
                 output.append(operator)
                 operator = operator_stack.pop()
-        
+
         # if operator, pop operators from operator stack to queue if they are of higher precedence
         elif (token in precedence):
             # if operator stack is not empty
@@ -197,7 +203,7 @@ def shunting_yard(infix_tokens):
                         current_operator = operator_stack[-1]
 
             operator_stack.append(token) # add token to stack
-        
+
         # else if operands, add to output list
         else:
             output.append(token.lower())
@@ -209,7 +215,7 @@ def shunting_yard(infix_tokens):
     return output
 
 """
-returns the list of docIDs which is the compliment of given right_operand 
+returns the list of docIDs which is the compliment of given right_operand
 params:
     right_operand:  sorted list of docIDs to be complimented
     indexed_docIDs: sorted list of all docIDs indexed
@@ -218,11 +224,11 @@ def boolean_NOT(right_operand, indexed_docIDs):
     # complement of an empty list is list of all indexed docIDs
     if (not right_operand):
         return indexed_docIDs
-    
+
     result = []
     r_index = 0 # index for right operand
     for item in indexed_docIDs:
-        # if item do not match that in right_operand, it belongs to compliment 
+        # if item do not match that in right_operand, it belongs to compliment
         if (item != right_operand[r_index]):
             result.append(item)
         # else if item matches and r_index still can progress, advance it by 1
@@ -247,7 +253,7 @@ def boolean_OR(left_operand, right_operand):
         if (l_index < len(left_operand) and r_index < len(right_operand)):
             l_item = left_operand[l_index]  # current item in left_operand
             r_item = right_operand[r_index] # current item in right_operand
-            
+
             # case 1: if items are equal, add either one to result and advance both pointers
             if (l_item == r_item):
                 result.append(l_item)
@@ -270,7 +276,7 @@ def boolean_OR(left_operand, right_operand):
             result.append(r_item)
             r_index += 1
 
-        # else if right_operand list is exhausted, append l_item and advance l_index 
+        # else if right_operand list is exhausted, append l_item and advance l_index
         else:
             l_item = left_operand[l_index]
             result.append(l_item)
@@ -295,13 +301,13 @@ def boolean_AND(left_operand, right_operand):
     while (l_index < len(left_operand) and r_index < len(right_operand)):
         l_item = left_operand[l_index]  # current item in left_operand
         r_item = right_operand[r_index] # current item in right_operand
-        
+
         # case 1: if match
         if (l_item == r_item):
             result.append(l_item)   # add to results
             l_index += 1            # advance left index
             r_index += 1            # advance right index
-        
+
         # case 2: if left item is more than right item
         elif (l_item > r_item):
             # if r_index can be skipped (if new r_index is still within range and resulting item is <= left item)
