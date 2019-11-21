@@ -332,7 +332,7 @@ def boolean_AND(left_operand, right_operand):
 prints the proper command usage
 """
 def print_usage():
-    print ("usage: " + sys.argv[0] + " -d dictionary-file -p postings-file -q file-of-queries -o output-file-of-results")
+    print ("usage: \n" + sys.argv[0] + " -d dictionary-file -p postings-file -q file-of-queries -o output-file-of-results")
 
 dictionary_file = postings_file = queries_file = output_file = None
 try:

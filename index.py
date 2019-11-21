@@ -23,9 +23,15 @@ params:
     postings_file:      postings file for all terms in dictionary
 """
 
+
+
+"""
+runfile('D:/Documents/GitHub/boolean-retrieval-engine/index.py -i document_directory -d dictionary_file -p postings_file', wdir='D:/Documents/GitHub/boolean-retrieval-engine')
 document_directory = 'D:/Documents/GitHub/boolean-retrieval-engine/documents'
 dictionary_file = 'dictionary.txt'
 postings_file = 'postings.txt'
+index(document_directory, dictionary_file, postings_file)
+"""
 
 
 def index(document_directory, dictionary_file, postings_file):
