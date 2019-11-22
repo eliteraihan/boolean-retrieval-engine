@@ -9,6 +9,7 @@ import math
 import io
 import collections
 import timeit
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 RECORD_TIME = False # toggling for recording the time taken for indexer
 BYTE_SIZE = 4       # docID is in int
@@ -22,10 +23,13 @@ params:
     output_file:        responses to boolean queries
 """
 
+"""
 dictionary_file = 'dictionary.txt'
 postings_file = 'postings.txt'
 queries_file = 'query.txt'
 output_file = 'output.txt'
+search(dictionary_file, postings_file, queries_file, output_file)
+"""
 
 def search(dictionary_file, postings_file, queries_file, output_file):
     # open files
@@ -96,7 +100,9 @@ params:
 
 """
 def process_query(query, dictionary, post_file, indexed_docIDs):
-    stemmer = nltk.stem.porter.PorterStemmer() # instantiate stemmer
+    #create stemmer
+    stemFactory = StemmerFactory()
+    stemmer = stemFactory.create_stemmer() # instantiate stemmer
     # prepare query list
     query = query.replace('(', '( ')
     query = query.replace(')', ' )')
