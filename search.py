@@ -1,18 +1,14 @@
 #!/usr/bin/python
-import re
-import nltk
-import sys
-import getopt
 import codecs
 import struct
 import math
 import io
 import collections
-import timeit
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 RECORD_TIME = False # toggling for recording the time taken for indexer
 BYTE_SIZE = 4       # docID is in int
+ERROR_STATS = False # for Error Stats Purposes
 
 """
 conducts boolean queries from queries_file and writes outputs to output_file
@@ -146,7 +142,10 @@ def process_query(query, dictionary, post_file, indexed_docIDs):
         # print ('result', result) # check
 
     # NOTE: at this point results_stack should only have one item and it is the final result
-    if len(results_stack) != 1: print ("ERROR: results_stack. Please check valid query") # check for errors
+    if len(results_stack) != 1:
+        print ("ERROR: results_stack. Please check valid query") # check for errors
+        global ERROR_STATS
+        ERROR_STATS = True
 
     return results_stack.pop()
 
@@ -334,34 +333,32 @@ def boolean_AND(left_operand, right_operand):
 
     return result
 
-"""
-prints the proper command usage
-"""
-def print_usage():
-    print ("usage: \n" + sys.argv[0] + " -d dictionary-file -p postings-file -q file-of-queries -o output-file-of-results")
 
-dictionary_file = postings_file = queries_file = output_file = None
-try:
-    opts, args = getopt.getopt(sys.argv[1:], 'd:p:q:o:')
-except (getopt.GetoptError, err):
-    usage()
-    sys.exit(2)
-for o, a in opts:
-    if o == '-d':
-        dictionary_file = a
-    elif o == '-p':
-        postings_file = a
-    elif o == '-q':
-        queries_file = a
-    elif o == '-o':
-        output_file = a
-    else:
-        assert False, "unhandled option"
-if (dictionary_file == None or postings_file == None or queries_file == None or output_file == None):
-    print_usage()
-    sys.exit(2)
+#Define
+dictionary_file = 'dictionary.txt'
+postings_file = 'postings.txt'
+queries_file = 'query.txt'
+output_file = 'output.txt'
+QUERY = ''
+#user input
+with open (queries_file, "w") as queue:
+    print("\nMau Cari Apa Gan?\n")
+    queue.write (input ());
 
-if (RECORD_TIME): start = timeit.default_timer()                    # start time
-search(dictionary_file, postings_file, queries_file, output_file)   # call the search engine on queries
-if (RECORD_TIME): stop = timeit.default_timer()                     # stop time
-if (RECORD_TIME): print ('Querying time:' + str(stop - start))      # print time taken
+#print query
+with open('query.txt', 'r') as file:
+    QUERY = file.read().replace('\n', '')
+    print("\nQuery Yang Ingin Dicari : "+QUERY+"\n")
+
+#function to run program
+search(dictionary_file, postings_file, queries_file, output_file)
+
+#error handlinng to print answer
+if(ERROR_STATS==False):
+    #print ans
+    with open('output.txt', 'r') as file:
+        data = file.read().replace('\n', '')
+        if not data:
+            print("Query '"+QUERY+"' Tidak Terdapat Di Dokumen Manapun")
+        else:
+            print("Query Terdapat Pada Dokumen Ke : "+data)

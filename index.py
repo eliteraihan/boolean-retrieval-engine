@@ -2,12 +2,9 @@
 import re
 import string
 import nltk
-import sys
-import getopt
 import codecs
 import os
 import struct
-import timeit
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 
