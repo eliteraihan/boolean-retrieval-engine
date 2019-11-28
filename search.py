@@ -362,3 +362,6 @@ if(ERROR_STATS==False):
             print("Query '"+QUERY+"' Tidak Terdapat Di Dokumen Manapun")
         else:
             print("Query Terdapat Pada Dokumen Ke : "+data)
+
+import time
+time.sleep(10)
