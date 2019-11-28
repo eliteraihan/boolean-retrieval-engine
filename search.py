@@ -93,8 +93,8 @@ params:
     query:          the query string e.g. 'bill OR Gates AND (vista OR XP) AND NOT mac'
     dictionary:     the dictionary in memory
     indexed_docIDs: the list of all docIDs indexed (used for negations)
-
 """
+
 def process_query(query, dictionary, post_file, indexed_docIDs):
     #create stemmer
     stemFactory = StemmerFactory()
@@ -334,7 +334,7 @@ def boolean_AND(left_operand, right_operand):
     return result
 
 
-#Define
+#MAIN PROGRAM
 dictionary_file = 'dictionary.txt'
 postings_file = 'postings.txt'
 queries_file = 'query.txt'

@@ -21,9 +21,6 @@ params:
 """
 
 
-
-#runfile('D:/Documents/GitHub/boolean-retrieval-engine/index.py -i document_directory -d dictionary_file -p postings_file', wdir='D:/Documents/GitHub/boolean-retrieval-engine')
-
 document_directory = 'D:/Documents/GitHub/boolean-retrieval-engine/documents'
 dictionary_file = 'dictionary.txt'
 postings_file = 'postings.txt'
@@ -31,7 +28,7 @@ postings_file = 'postings.txt'
 #index(document_directory, dictionary_file, postings_file)
 
 
-# preprocess docID list
+# preprocess docID list, nama setiap doc dalam integer
 docID_list = [int(docID_string) for docID_string in os.listdir(document_directory)]
 docID_list.sort()
 
@@ -45,7 +42,7 @@ dictionary = {}     # key: term, value: [postings list]
 # for each document in corpus
 for docID in docID_list:
     if (LIMIT and docs_indexed == LIMIT): break
-    file_path = os.path.join(document_directory, str(docID))
+    file_path = os.path.join(document_directory, str(docID))    # int to string
 
     # if valid document
     if (os.path.isfile(file_path)):
