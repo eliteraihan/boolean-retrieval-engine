@@ -216,7 +216,7 @@ def shunting_yard(infix_tokens):
     # while there are still operators on the stack, pop them into the queue
     while (operator_stack):
         output.append(operator_stack.pop())
-    # print ('postfix:', output)  # check
+    print ('postfix:', output)  # check
     return output
 
 """

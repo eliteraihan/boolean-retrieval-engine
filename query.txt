@@ -1,0 +1,1 @@
+ini AND itu OR inu AND NOT anu OR (ena OR NOT ena)
