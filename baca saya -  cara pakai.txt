@@ -1,3 +1,0 @@
-jalanin dlu sebagai file (Run File),
-terus jalanin line-per-line yg ada di file index.py (untuk pembuatan indeksnya),
-untuk search, sama juga polanya
